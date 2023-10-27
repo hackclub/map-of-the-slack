@@ -1,12 +1,10 @@
-import os
 import json
-import time
-from slack_sdk import WebClient, errors
 import click
 from os.path import exists
+import util.slack_client as slack_client
 
 def download_members():
-	client = WebClient(os.environ['SLACK_BOT_TOKEN'])
+	client = slack_client.getClient()
 
 	if not exists("json_data/channels.json"):
 		click.echo("Channels not downloaded. Please run `python main.py download channels` first.")
@@ -29,27 +27,15 @@ def download_members():
 				members[channel['id']] = existingMembers[channel['id']]
 				continue
 
-			try:
-				currentMembersRes = client.conversations_members(limit=1000, channel=channel['id'])
-			except errors.SlackApiError as e:
-				if e.response.status_code == 429:
-					delay = int(e.response.headers['Retry-After'])
-					print(f"Rate limited. Retrying in {delay} seconds")
-					time.sleep(delay)
-					currentMembersRes = client.conversations_members(limit=1000, channel=channel['id'])
+			currentMembersRes = client.conversations_members(limit=1000, channel=channel['id'])
 
 			members[channel['id']] = []
 
 			while currentMembersRes['response_metadata']['next_cursor'] != '':
 				members[channel['id']] += currentMembersRes['members']
-				try:
-					currentMembersRes = client.conversations_members(limit=1000, channel=channel['id'], cursor=currentMembersRes['response_metadata']['next_cursor'])
-				except errors.SlackApiError as e:
-					if e.response.status_code == 429:
-						delay = int(e.response.headers['Retry-After'])
-						print(f"Rate limited. Retrying in {delay} seconds")
-						time.sleep(delay)
-						currentMembersRes = client.conversations_members(limit=1000, channel=channel['id'], cursor=currentMembersRes['response_metadata']['next_cursor'])
+
+				currentMembersRes = client.conversations_members(limit=1000, channel=channel['id'], cursor=currentMembersRes['response_metadata']['next_cursor'])
+				
 			
 			members[channel['id']] += currentMembersRes['members']
 

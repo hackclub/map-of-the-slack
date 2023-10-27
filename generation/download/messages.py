@@ -1,12 +1,10 @@
-import os
 import json
-import time
-from slack_sdk import WebClient, errors
 import click
 from os.path import exists
+import util.slack_client as slack_client
 
 def download_messages():
-	client = WebClient(os.environ['SLACK_BOT_TOKEN'])
+	client = slack_client.getClient()
 
 	if not exists("json_data/channels.json"):
 		click.echo("Channels not downloaded. Please run `python main.py download channels` first.")
@@ -29,21 +27,8 @@ def download_messages():
 				messages[channel['id']] = existingMessages[channel['id']]
 				continue
 
-			try:
-				client.conversations_join(channel=channel['id'])
-			except errors.SlackApiError as e:
-				if e.response.status_code == 429:
-					delay = int(e.response.headers['Retry-After'])
-					time.sleep(delay)
-					client.conversations_join(channel=channel['id'])
-				
-			try:
-				res = client.conversations_history(channel=channel['id'], limit=150)
-			except errors.SlackApiError as e:
-				if e.response.status_code == 429:
-					delay = int(e.response.headers['Retry-After'])
-					time.sleep(delay)
-					res = client.conversations_history(channel=channel['id'], limit=150)
+			client.conversations_join(channel=channel['id'])
+			res = client.conversations_history(channel=channel['id'], limit=150)
 
 			messages[channel['id']] = res['messages']
 

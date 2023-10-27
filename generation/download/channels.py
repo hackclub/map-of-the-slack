@@ -1,10 +1,9 @@
-import os
 import json
-from slack_sdk import WebClient
 import click
+import util.slack_client as slack_client
 
 def download_channels():
-	client = WebClient(os.environ['SLACK_BOT_TOKEN'])
+	client = slack_client.getClient()
 
 	conversations = []
 
