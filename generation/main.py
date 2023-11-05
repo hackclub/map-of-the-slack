@@ -6,6 +6,7 @@ from download.messages import download_messages
 from download.members import download_members
 from process.similarity import process_similarity
 from process.labels import process_labels
+from process.filters import process_filters
 from query.random_similarity_indices import query_random_similarity_indices
 from query.graph import query_graph
 
@@ -42,6 +43,10 @@ def similarity():
 @process.command()
 def labels():
 	process_labels()
+
+@process.command()
+def filters():
+	process_filters()
 
 @root.group()
 def query():

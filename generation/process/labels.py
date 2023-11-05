@@ -4,11 +4,11 @@ import click
 from os.path import exists
 
 def process_labels():
-	if not exists("json_data/channels.json"):
-		click.echo("Channels not downloaded. Please run `python main.py download channels` first.")
+	if not exists("json_data/filtered_channels.json"):
+		click.echo("Channels not filtered. Please run `python main.py process filters` first.")
 		return
 
-	channelsFile = open('json_data/channels.json', 'r', encoding='utf-8')
+	channelsFile = open('json_data/filtered_channels.json', 'r', encoding='utf-8')
 	channels = json.loads(channelsFile.read())
 
 	if not exists("json_data/messages.json"):

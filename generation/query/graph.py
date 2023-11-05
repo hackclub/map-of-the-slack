@@ -1,7 +1,7 @@
 import json
 import click
 import igraph as ig
-import random
+from os.path import exists
 
 def find_channel_name(channels, channelId):
 	for channel in channels:
@@ -11,10 +11,18 @@ def find_channel_name(channels, channelId):
 def query_graph():
 	g = ig.Graph()
 
+	if not exists("json_data/similarity_indices.json"):
+		click.echo("Similarities not processed. Please run `python main.py process similarity` first.")
+		return
+
 	file = open("json_data/similarity_indices.json", "r", encoding="utf-8")
 	data = dict(json.load(file))
 
-	channelsFile = open('json_data/channels.json', 'r', encoding='utf-8')
+	if not exists("json_data/filtered_channels.json"):
+		click.echo("Channels not filtered. Please run `python main.py process filters` first.")
+		return
+
+	channelsFile = open('json_data/filtered_channels.json', 'r', encoding='utf-8')
 	channels = list(json.loads(channelsFile.read()))
 
 	with click.progressbar(list(data.items()), label="Building graph...") as bar:
