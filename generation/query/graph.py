@@ -33,11 +33,19 @@ def query_graph():
 			channelA = str(key).split('-')[0]
 			channelB = str(key).split('-')[1]
 
-			g.add_vertex(channelA, label=find_channel_name(channels, channelA))
-			g.add_vertex(channelB, label=find_channel_name(channels, channelB))
+			try:
+				g.vs.find(name=channelA)
+			except:
+				g.add_vertex(channelA, label=find_channel_name(channels, channelA))
+
+			try:
+				g.vs.find(name=channelB)
+			except:
+				g.add_vertex(channelB, label=find_channel_name(channels, channelB))
+			
 			g.add_edge(channelA, channelB)
 
 	click.echo("Plotting graph...")
 
 	layout = g.layout("kk")
-	ig.plot(g, "map_output.pdf", layout=layout, bbox=(20000,20000))
+	ig.plot(g, "map_output.pdf", layout=layout, bbox=(15000,15000))
