@@ -1,6 +1,7 @@
 import json
 import click
 import util.slack_client as slack_client
+import os
 
 def download_channels():
 	client = slack_client.getClient()
@@ -30,6 +31,9 @@ def download_channels():
 
 	channelJson = json.dumps(conversations)
 
+	if not os.path.exists("json_data"):
+		os.mkdir("json_data")
+	
 	file = open('json_data/channels.json', 'w', encoding='utf-8')
 	file.write(channelJson)
 

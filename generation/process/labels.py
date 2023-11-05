@@ -50,9 +50,9 @@ def process_labels():
 			description = channel['purpose']['value']
 
 			messages_str = ""
-			raw_messages = raw_messages[channel['id']]
+			msgs = raw_messages[channel['id']]
 
-			for message in raw_messages:
+			for message in msgs:
 				if 'text' in message:
 					messages_str = messages_str + " " + message['text']
 

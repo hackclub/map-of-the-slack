@@ -1,5 +1,6 @@
 import json
 import click
+import os
 from os.path import exists
 import util.slack_client as slack_client
 
@@ -31,6 +32,9 @@ def download_messages():
 			res = client.conversations_history(channel=channel['id'], limit=150)
 
 			messages[channel['id']] = res['messages']
+
+	if not os.path.exists("json_data"):
+		os.mkdir("json_data")
 
 	messagesJson = json.dumps(messages)
 	messagesFile = open('json_data/messages.json', 'w', encoding='utf-8')

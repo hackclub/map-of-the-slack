@@ -1,5 +1,6 @@
 import json
 import click
+import os
 from os.path import exists
 import util.slack_client as slack_client
 
@@ -38,6 +39,9 @@ def download_members():
 				
 			
 			members[channel['id']] += currentMembersRes['members']
+
+	if not os.path.exists("json_data"):
+		os.mkdir("json_data")
 
 	membersJson = json.dumps(members)
 	membersFile = open('json_data/members.json', 'w', encoding='utf-8')

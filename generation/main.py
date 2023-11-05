@@ -7,6 +7,7 @@ from download.members import download_members
 from process.similarity import process_similarity
 from process.labels import process_labels
 from query.random_similarity_indices import query_random_similarity_indices
+from query.graph import query_graph
 
 load_dotenv()
 
@@ -49,6 +50,10 @@ def query():
 @query.command()
 def random_similarity_indices():
 	query_random_similarity_indices()
+
+@query.command()
+def graph():
+	query_graph()
 
 if __name__ == '__main__':
 	root()
