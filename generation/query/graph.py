@@ -25,6 +25,8 @@ def query_graph():
 	channelsFile = open('json_data/filtered_channels.json', 'r', encoding='utf-8')
 	channels = list(json.loads(channelsFile.read()))
 
+	weights = []
+
 	with click.progressbar(list(data.items()), label="Building graph...") as bar:
 		for (key, value) in bar:
 			if float(value) < 0.5:
@@ -36,16 +38,18 @@ def query_graph():
 			try:
 				g.vs.find(name=channelA)
 			except:
-				g.add_vertex(channelA, label=find_channel_name(channels, channelA))
+				g.add_vertex(channelA)
 
 			try:
 				g.vs.find(name=channelB)
 			except:
-				g.add_vertex(channelB, label=find_channel_name(channels, channelB))
+				g.add_vertex(channelB)
 			
 			g.add_edge(channelA, channelB)
+			weights.append(value)
 
 	click.echo("Plotting graph...")
 
+	clustered = g.community_leiden(weights=weights)
 	layout = g.layout("kk")
-	ig.plot(g, "map_output.pdf", layout=layout, bbox=(15000,15000))
+	ig.plot(clustered, "map_output.pdf", layout=layout, bbox=(15000,15000))
