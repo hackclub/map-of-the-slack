@@ -2,13 +2,14 @@ import json
 import click
 import igraph as ig
 from os.path import exists
+import re
 
 def find_channel_name(channels, channelId):
 	for channel in channels:
 		if channel["id"] == channelId:
 			return channel["name"]
 
-def query_graph():
+def process_graph():
 	g = ig.Graph()
 
 	if not exists("json_data/similarity_indices.json"):
@@ -52,4 +53,28 @@ def query_graph():
 
 	clustered = g.community_leiden(weights=weights)
 	layout = g.layout("kk")
-	ig.plot(clustered, "map_output.pdf", layout=layout, bbox=(15000,15000))
+
+	cplot = ig.plot(clustered, None, layout=layout, bbox=(15000, 15000))
+	objstr = re.split(r'\[\s*\d\] ', str(cplot._objects[0][0]))
+	objstr.pop(0)
+
+	def mapc(c: str):
+		print(c)
+		ids = c.strip().split(',')
+		ids = map(lambda id: id.strip(), ids)
+
+		return ids
+
+	clusters = map(mapc, objstr)
+	objects = []
+	for cluster in clusters:
+		for obj in cluster:
+			objects.append(obj)
+
+	nodes = {}
+	for i in range(len(objects)):
+		nodes[objects[i]] = cplot._objects[0][5]['layout'].__dict__['_coords'][i]
+
+	nodes_json = json.dumps(nodes)
+	nodes_file = open('json_data/nodes.json', 'w', encoding='utf-8')
+	nodes_file.write(nodes_json)

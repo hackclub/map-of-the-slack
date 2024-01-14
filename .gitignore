@@ -12,5 +12,5 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 /.idea
 generation/json_data
-generation/map_output.pdf
+generation/output
 __pycache__

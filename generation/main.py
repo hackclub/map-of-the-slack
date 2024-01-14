@@ -7,8 +7,10 @@ from download.members import download_members
 from process.similarity import process_similarity
 from process.labels import process_labels
 from process.filters import process_filters
+from process.graph import process_graph
+from process.geojson import process_geojson
 from query.random_similarity_indices import query_random_similarity_indices
-from query.graph import query_graph
+
 
 load_dotenv()
 
@@ -48,6 +50,14 @@ def labels():
 def filters():
 	process_filters()
 
+@process.command()
+def graph():
+	process_graph()
+
+@process.command()
+def geojson():
+	process_geojson()
+
 @root.group()
 def query():
 	pass
@@ -55,10 +65,6 @@ def query():
 @query.command()
 def random_similarity_indices():
 	query_random_similarity_indices()
-
-@query.command()
-def graph():
-	query_graph()
 
 if __name__ == '__main__':
 	root()
