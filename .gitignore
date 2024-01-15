@@ -14,3 +14,5 @@ vite.config.ts.timestamp-*
 generation/json_data
 generation/output
 __pycache__
+
+static/nodes.json
