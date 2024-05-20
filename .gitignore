@@ -15,4 +15,4 @@ generation/json_data
 generation/output
 __pycache__
 
-static/nodes.json
+static/geojson.json

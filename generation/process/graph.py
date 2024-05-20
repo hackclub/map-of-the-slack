@@ -59,7 +59,6 @@ def process_graph():
 	objstr.pop(0)
 
 	def mapc(c: str):
-		print(c)
 		ids = c.strip().split(',')
 		ids = map(lambda id: id.strip(), ids)
 

@@ -32,7 +32,7 @@
             /></svg
           >
         </div>
-        <span>{props.name}</span>
+        <span>{props?.name}</span>
       </MarkerLayer>
     </GeoJSON>
   </MapLibre>
