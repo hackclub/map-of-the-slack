@@ -1,5 +1,5 @@
 <script>
-  import { MapLibre, GeoJSON, MarkerLayer } from "svelte-maplibre";
+  import { MapLibre, GeoJSON, MarkerLayer, LineLayer } from "svelte-maplibre";
 
   export let data;
 </script>
@@ -11,7 +11,7 @@
 
 <section>
   <MapLibre
-    center={[50, 20]}
+    center={[0, 0]}
     zoom={7}
     class="map"
     standardControls
@@ -34,6 +34,14 @@
         </div>
         <span>{props?.name}</span>
       </MarkerLayer>
+      <LineLayer
+        layout={{ "line-cap": "round", "line-join": "round" }}
+        paint={{
+          "line-width": 3,
+          "line-color": "#000000",
+          "line-opacity": 0.6,
+        }}
+      />
     </GeoJSON>
   </MapLibre>
 </section>

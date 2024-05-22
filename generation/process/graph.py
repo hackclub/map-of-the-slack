@@ -19,18 +19,12 @@ def process_graph():
 	file = open("json_data/similarity_indices.json", "r", encoding="utf-8")
 	data = dict(json.load(file))
 
-	if not exists("json_data/filtered_channels.json"):
-		click.echo("Channels not filtered. Please run `python main.py process filters` first.")
-		return
-
-	channelsFile = open('json_data/filtered_channels.json', 'r', encoding='utf-8')
-	channels = list(json.loads(channelsFile.read()))
-
 	weights = []
+	edges = []
 
 	with click.progressbar(list(data.items()), label="Building graph...") as bar:
 		for (key, value) in bar:
-			if float(value) < 0.5:
+			if float(value) < 0.75:
 				continue
 
 			channelA = str(key).split('-')[0]
@@ -47,6 +41,7 @@ def process_graph():
 				g.add_vertex(channelB)
 			
 			g.add_edge(channelA, channelB)
+			edges.append(f'{channelA}-{channelB}')
 			weights.append(value)
 
 	click.echo("Plotting graph...")
@@ -68,12 +63,18 @@ def process_graph():
 	objects = []
 	for cluster in clusters:
 		for obj in cluster:
-			objects.append(obj)
+			for n in obj.split('\n'):
+				objects.append(re.split(r'\[.+\] ', n)[-1])
 
 	nodes = {}
 	for i in range(len(objects)):
-		nodes[objects[i]] = cplot._objects[0][5]['layout'].__dict__['_coords'][i]
+		key = objects[i]
+		nodes[key] = cplot._objects[0][5]['layout'].__dict__['_coords'][i]
 
 	nodes_json = json.dumps(nodes)
 	nodes_file = open('json_data/nodes.json', 'w', encoding='utf-8')
 	nodes_file.write(nodes_json)
+
+	edges_json = json.dumps(edges)
+	edges_file = open('json_data/edges.json', 'w', encoding='utf-8')
+	edges_file.write(edges_json)
