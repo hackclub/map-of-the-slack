@@ -5,7 +5,14 @@ A map of all the channels in the slack!
 ## Generating data
 
 All data generation/processing code is in Python, located in the `generation` directory.
-You must first create a `.env` file in that directory - use `sample.env` as guidance.
+You must first install dependencies (use a venv):
+
+```
+pip install -r requirements.txt
+python -m spacy download en_core_web_md
+```
+
+Then, create a `.env` file in that directory - use `sample.env` as guidance.
 To get started, run all of the commands, in this order:
 
 1. `python3 main.py download channels`

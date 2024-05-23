@@ -18,13 +18,6 @@ def process_filters():
 	messagesFile = open('json_data/messages.json', 'r', encoding='utf-8')
 	raw_messages = json.loads(messagesFile.read())
 
-	if not exists("json_data/members.json"):
-		click.echo("Members not downloaded. Please run `python main.py download members` first.")
-		return
-
-	membersFile = open('json_data/members.json', 'r', encoding='utf-8')
-	members = json.loads(membersFile.read())
-
 	filtered_channels = []
 
 	with click.progressbar(channels, label="Filtering channels...") as bar:
@@ -33,13 +26,25 @@ def process_filters():
 			is_not_zzz = not channel["name"].startswith("zzz-")
 			has_members = channel["num_members"] > 10
 
-			def get_ts(c):
-				return c["ts"]
+			def is_usr_msg(m):
+				if "subtype" in m:
+					return False
+				else:
+					return True
+
+			filtered_messages = list(filter(is_usr_msg, raw_messages[channel["id"]]))
+
+			if len(filtered_messages) == 0:
+				continue
+
+			def get_ts(m):
+				return float(m["ts"])
 			
-			sorted_messages = list(raw_messages[channel["id"]])
+			sorted_messages = filtered_messages
 			sorted_messages.sort(key=get_ts, reverse=True)
+
 			# has messages within a year
-			has_recent_messages = float(sorted_messages[0]["ts"]) - time() < 31536000
+			has_recent_messages = time() - float(sorted_messages[0]["ts"]) < 31536000
 
 			if (is_not_archived and is_not_zzz and has_members and has_recent_messages):
 				filtered_channels.append(channel)

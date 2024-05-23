@@ -16,3 +16,4 @@ generation/output
 __pycache__
 
 static/geojson.json
+*.mbtiles

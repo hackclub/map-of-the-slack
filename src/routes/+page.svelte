@@ -37,9 +37,9 @@
       <LineLayer
         layout={{ "line-cap": "round", "line-join": "round" }}
         paint={{
-          "line-width": 3,
+          "line-width": 1,
           "line-color": "#000000",
-          "line-opacity": 0.6,
+          "line-opacity": 0.1,
         }}
       />
     </GeoJSON>

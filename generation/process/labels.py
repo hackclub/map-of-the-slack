@@ -25,7 +25,7 @@ def process_labels():
 	membersFile = open('json_data/members.json', 'r', encoding='utf-8')
 	members = json.loads(membersFile.read())
 
-	nlp = spacy.load("en_core_web_sm")
+	nlp = spacy.load("en_core_web_md")
 
 	all_labels = {}
 

@@ -28,7 +28,9 @@ def download_messages():
 				messages[channel['id']] = existingMessages[channel['id']]
 				continue
 
-			client.conversations_join(channel=channel['id'])
+			if channel["is_private"] == False:
+				client.conversations_join(channel=channel['id'])
+				
 			res = client.conversations_history(channel=channel['id'], limit=150)
 
 			messages[channel['id']] = res['messages']

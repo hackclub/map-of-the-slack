@@ -19,12 +19,11 @@ def process_graph():
 	file = open("json_data/similarity_indices.json", "r", encoding="utf-8")
 	data = dict(json.load(file))
 
-	weights = []
 	edges = []
 
 	with click.progressbar(list(data.items()), label="Building graph...") as bar:
 		for (key, value) in bar:
-			if float(value) < 0.75:
+			if float(value) < 0.2:
 				continue
 
 			channelA = str(key).split('-')[0]
@@ -40,16 +39,15 @@ def process_graph():
 			except:
 				g.add_vertex(channelB)
 			
-			g.add_edge(channelA, channelB)
+			g.add_edge(channelA, channelB, weight=float(value))
 			edges.append(f'{channelA}-{channelB}')
-			weights.append(value)
 
 	click.echo("Plotting graph...")
 
-	clustered = g.community_leiden(weights=weights)
-	layout = g.layout("kk")
+	clustered = g.community_leiden(weights=g.es["weight"], resolution=8, n_iterations=20)
+	layout = g.layout("drl")
 
-	cplot = ig.plot(clustered, None, layout=layout, bbox=(15000, 15000))
+	cplot = ig.plot(clustered, None, layout=layout, bbox=(100, 100))
 	objstr = re.split(r'\[\s*\d\] ', str(cplot._objects[0][0]))
 	objstr.pop(0)
 
