@@ -1,0 +1,27 @@
+{
+  "display_information": {
+    "name": "Map of the Slack"
+  },
+  "features": {
+    "bot_user": {
+      "display_name": "Map of the Slack",
+      "always_online": false
+    }
+  },
+  "oauth_config": {
+    "scopes": {
+      "bot": [
+        "channels:history",
+        "channels:join",
+        "channels:read",
+        "groups:history",
+        "groups:read"
+      ]
+    }
+  },
+  "settings": {
+    "org_deploy_enabled": false,
+    "socket_mode_enabled": false,
+    "token_rotation_enabled": false
+  }
+}

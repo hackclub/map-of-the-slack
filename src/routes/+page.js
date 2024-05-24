@@ -3,7 +3,7 @@
 export const prerender = true;
 
 /** @type {import('./$types').PageLoad} */
-export async function load({ fetch, params }) {
+export async function load({ fetch }) {
   const nodes = await (await fetch("/geojson.json")).json();
 
   return {

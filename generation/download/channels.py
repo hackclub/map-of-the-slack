@@ -37,11 +37,13 @@ def download_channels():
 
 			bar.pos = int(progress * 999) + 1
 			bar.update(1)
+	
+		bar.update(1000)
 			
 	conversations += currentConversationsRes['channels']
 	conversations.sort(key=lambda x: x['name'])
 
-	conversations = filter(lambda x: x['is_archived'] == False and not x['name'].startswith('zzz-') and x['num_members'] > 5, conversations)
+	conversations = filter(lambda x: x['is_archived'] == False and not x['name'].startswith('zzz-') and x['num_members'] > 10, conversations)
 	conversations = list(conversations)
 
 	channelJson = json.dumps(conversations)

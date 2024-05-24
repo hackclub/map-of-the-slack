@@ -22,10 +22,6 @@ def process_filters():
 
 	with click.progressbar(channels, label="Filtering channels...") as bar:
 		for channel in bar:
-			is_not_archived = not channel["is_archived"]
-			is_not_zzz = not channel["name"].startswith("zzz-")
-			has_members = channel["num_members"] > 10
-
 			def is_usr_msg(m):
 				if "subtype" in m:
 					return False
@@ -46,7 +42,7 @@ def process_filters():
 			# has messages within a year
 			has_recent_messages = time() - float(sorted_messages[0]["ts"]) < 31536000
 
-			if (is_not_archived and is_not_zzz and has_members and has_recent_messages):
+			if (has_recent_messages):
 				filtered_channels.append(channel)
 
 	filtered_channels_json = json.dumps(filtered_channels)

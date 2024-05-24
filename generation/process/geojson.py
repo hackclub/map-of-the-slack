@@ -20,6 +20,8 @@ def process_geojson():
 	edges_file = open('json_data/edges.json', 'r', encoding='utf-8')
 	edges = list(json.loads(edges_file.read()))
 
+	click.echo("Generating geojson...")
+
 	geojsons = []
 	for node in nodes.keys():
 		geojson = {

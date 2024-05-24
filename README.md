@@ -9,20 +9,18 @@ You must first install dependencies (use a venv):
 
 ```
 pip install -r requirements.txt
-python -m spacy download en_core_web_md
+python -m spacy download en_core_web_lg
 ```
 
 Then, create a `.env` file in that directory - use `sample.env` as guidance.
-To get started, run all of the commands, in this order:
+To get started, run the "all" command:
 
-1. `python3 main.py download channels`
-2. `python3 main.py download members`
-3. `python3 main.py download messages`
-4. `python3 main.py process filters`
-5. `python3 main.py process labels`
-6. `python3 main.py process similarity`
-7. `python3 main.py process graph`
-8. `python3 main.py process geojson`
+```
+python main.py all
+```
+
+**This will probably take a very long time**, especially when downloading data!
+Last time I ran it, it took about 48 minutes and also used up to 3 gigabytes of RAM.
 
 After this, you can run each command independently as needed, such as to update data or test new code.
 
