@@ -10,13 +10,17 @@ from process.filters import process_filters
 from process.graph import process_graph
 from process.geojson import process_geojson
 from query.random_similarity_indices import query_random_similarity_indices
-
+from all import run_all
 
 load_dotenv()
 
 @click.group()
 def root():
 	pass
+
+@root.command()
+def all():
+	run_all()
 
 @root.group()
 def download():

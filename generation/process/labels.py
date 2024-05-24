@@ -25,7 +25,7 @@ def process_labels():
 	membersFile = open('json_data/members.json', 'r', encoding='utf-8')
 	members = json.loads(membersFile.read())
 
-	nlp = spacy.load("en_core_web_md")
+	nlp = spacy.load("en_core_web_lg")
 
 	all_labels = {}
 
@@ -48,6 +48,7 @@ def process_labels():
 				num_str = "nm-xs"
 
 			description = channel['purpose']['value']
+			topic = channel['topic']['value']
 
 			messages_str = ""
 			msgs = raw_messages[channel['id']]
@@ -58,12 +59,17 @@ def process_labels():
 
 			nameBits = channel['name'].split('-')
 			
-			descDoc = nlp(description)
-			msgDoc = nlp(messages_str)
+			descDoc = nlp(description[0:1000000])
+			topicDoc = nlp(topic)
+			# Limiting to 1 million characters to avoid memory issues
+			msgDoc = nlp(messages_str[0:1000000])
 
 			channel_labels = [*nameBits, *members[channel['id']], num_str]
 
 			for ent in descDoc.ents:
+				channel_labels.append(ent.text)
+
+			for ent in topicDoc.ents:
 				channel_labels.append(ent.text)
 
 			for ent in msgDoc.ents:

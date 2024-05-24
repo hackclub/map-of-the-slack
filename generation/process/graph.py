@@ -44,7 +44,7 @@ def process_graph():
 
 	click.echo("Plotting graph...")
 
-	clustered = g.community_leiden(weights=g.es["weight"], resolution=8, n_iterations=20)
+	clustered = g.community_leiden(weights=g.es["weight"], resolution=12, n_iterations=50)
 	layout = g.layout("drl")
 
 	cplot = ig.plot(clustered, None, layout=layout, bbox=(100, 100))
