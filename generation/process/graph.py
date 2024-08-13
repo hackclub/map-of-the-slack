@@ -44,10 +44,11 @@ def process_graph():
 
 	click.echo("Plotting graph...")
 
-	clustered = g.community_leiden(weights=g.es["weight"], resolution=12, n_iterations=50)
+	clustered = g.community_leiden(weights=g.es["weight"], resolution=0.1, n_iterations=50)
+	click.echo(clustered.summary())
 	layout = g.layout("drl")
 
-	cplot = ig.plot(clustered, None, layout=layout, bbox=(100, 100))
+	cplot = ig.plot(clustered, None, layout=layout, bbox=(50, 50))
 	objstr = re.split(r'\[\s*\d\] ', str(cplot._objects[0][0]))
 	objstr.pop(0)
 
@@ -61,8 +62,10 @@ def process_graph():
 	objects = []
 	for cluster in clusters:
 		for obj in cluster:
+			# click.echo(obj)
 			for n in obj.split('\n'):
 				objects.append(re.split(r'\[.+\] ', n)[-1])
+		# click.echo("cluster")
 
 	nodes = {}
 	for i in range(len(objects)):
