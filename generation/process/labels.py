@@ -57,26 +57,26 @@ def process_labels():
 				if 'text' in message:
 					messages_str = messages_str + " " + message['text']
 
-			nameBits = channel['name'].split('-')
-			
+			nameBits = map(lambda b: (b, 10), channel['name'].split('-'))
+			member_labels = map(lambda m: (m, 5), members[channel['id']])
 			descDoc = nlp(description[0:1000000])
 			topicDoc = nlp(topic)
 			# Limiting to 1 million characters to avoid memory issues
 			msgDoc = nlp(messages_str[0:1000000])
 
-			channel_labels = [*nameBits, *members[channel['id']], num_str]
+			channel_labels = [*nameBits, *member_labels, (num_str, 5)]
 
 			for ent in descDoc.ents:
-				channel_labels.append(ent.text)
+				channel_labels.append((ent.text, 10))
 
 			for ent in topicDoc.ents:
-				channel_labels.append(ent.text)
+				channel_labels.append((ent.text, 10))
 
 			for ent in msgDoc.ents:
 				try:
 					int(ent.text)
 				except:
-					channel_labels.append(ent.text)
+					channel_labels.append((ent.text, 3))
 
 			all_labels[channel['id']] = channel_labels
 
