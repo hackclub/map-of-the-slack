@@ -19,7 +19,7 @@ preshed==3.0.9
 pycairo==1.26.0
 pydantic==2.4.2
 pydantic_core==2.10.1
-python-dotenv==1.0.0
+python-dotenv==1.2.2
 requests==2.31.0
 slack-sdk==3.23.0
 smart-open==6.4.0
